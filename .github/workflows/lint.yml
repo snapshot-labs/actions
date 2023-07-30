@@ -1,0 +1,21 @@
+name: Lint
+on:
+  workflow_call:
+    inputs:
+      target:
+        required: false
+        default: '16'
+        type: string
+    secrets: inherit
+jobs:
+  lint:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ inputs.target }}
+          cache: 'yarn'
+      - run: yarn
+      - run: yarn lint
+      - run: yarn typecheck
