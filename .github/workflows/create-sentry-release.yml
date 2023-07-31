@@ -9,10 +9,9 @@ on:
       project:
         required: true
         type: string
-    secrets: inherit
 jobs:
   create-sentry-release:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
