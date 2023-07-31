@@ -16,6 +16,7 @@ on: [push]
 jobs:
   lint:
     uses: snapshot-labs/actions/.github/workflows/lint.yml@main
+    secrets: inherit
 ```
 
 If you want to run it on different node versions 
@@ -33,6 +34,7 @@ jobs:
     uses: snapshot-labs/actions/.github/workflows/lint.yml@main
     with:
       target: ${{ matrix.target }}
+    secrets: inherit  
 ```
 
 ### Test
@@ -47,6 +49,7 @@ on: [push]
 jobs:
   test:
     uses: snapshot-labs/actions/.github/workflows/test.yml@main
+    secrets: inherit
 ```
 
 You can optionally test on multiple node versions, and setup a storage
@@ -65,6 +68,7 @@ jobs:
       # Setup MySQL database
       mysql_database_name: mydb_test
       mysql_schema_path: ./schema.sql # Default to 'src/helpers/schema.sql'
+    secrets: inherit 
 ```
 
 ### Create a sentry release
@@ -89,6 +93,7 @@ jobs:
       project: YOUR-SENTRY-PROJECT-NAME
       # You can optionally add the following line to set the node version (Default is 16)
       # target: '16'
+    secrets: inherit  
 ```
 
 
