@@ -6,7 +6,6 @@ on:
         required: false
         default: '16'
         type: string
-    secrets: inherit
 jobs:
   lint:
     runs-on: ubuntu-latest

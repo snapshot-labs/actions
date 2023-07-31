@@ -13,7 +13,6 @@ on:
         required: false
         type: string
         default: 'src/helpers/schema.sql'
-    secrets: inherit
 jobs:
   test:
     runs-on: ubuntu-latest

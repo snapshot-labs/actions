@@ -9,7 +9,6 @@ on:
       project:
         required: true
         type: string
-    secrets: inherit
 jobs:
   create-sentry-release:
     runs-on: ubuntu-latest
