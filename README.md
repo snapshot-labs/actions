@@ -113,4 +113,5 @@ on:
 jobs:
   publish-npm:
     uses: snapshot-labs/actions/.github/workflows/publish-npm.yml@main
+    secrets: inherit
 ```
