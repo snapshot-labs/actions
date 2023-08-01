@@ -6,62 +6,59 @@ This repository centralize all Github actions workflows used by @snapshot-labs, 
 
 ### Lint
 
-This workflow trigger the lint (`yarn lint`) and typecheck (`yarn typecheck`) tasks.
+This workflow trigger the lint and typecheck tasks.
+
+#### Pre-requisites
+
+- Your lint task is ran with `yarn lint`
+- Your typescript check task is ran with `yarn typecheck`
+
+#### Usage
 
 Install it in your project by creating the file `.github/workflows/lint.yml`, with the following content 
 
 ```yaml 
 name: Lint
+
 on: [push]
+
 jobs:
   lint:
     uses: snapshot-labs/actions/.github/workflows/lint.yml@main
-```
-
-If you want to run it on different node versions 
-
-```yaml 
-
-```yaml 
-name: Lint
-on: [push]
-jobs:
-  lint:
-  	strategy:
-      matrix:
-        target: ['16', '18', '20'] # Set your desired node versions (Default is 16)
-    uses: snapshot-labs/actions/.github/workflows/lint.yml@main
-    with:
-      target: ${{ matrix.target }}
 ```
 
 ### Test
 
-This workflow trigger the test suite (`yarn test`), and upload the test coverage to codecov.
+This workflow trigger the test suite, and upload the test coverage to codecov.
 
-**Ensure your test command is creating the test coverage report.**
+#### Pre-requisites
+
+- Your test suite is ran with `yarn test`
+- A coverage report should be produced at the end of the test suite
+
+#### Usage
+
+Install it in your project by creating the file `.github/workflows/test.yml`, with the following content 
 
 ```yaml 
 name: Test
+
 on: [push]
+
 jobs:
   test:
     uses: snapshot-labs/actions/.github/workflows/test.yml@main
 ```
 
-You can optionally test on multiple node versions, and setup a storage
+You can optionally setup a storage
 
 ```yaml 
 name: Test
 on: [push]
 jobs:
   test:
-    strategy:
-      matrix:
-        target: ['16', '18', '20'] # Set your desired node versions (Default is 16)
     uses: snapshot-labs/actions/.github/workflows/test.yml@main
     with:
-      target: ${{ matrix.target }}
       # Setup MySQL database
       mysql_database_name: mydb_test
       mysql_schema_path: ./schema.sql # Default to 'src/helpers/schema.sql'
@@ -71,10 +68,31 @@ jobs:
 
 This workflow trigger a task to upload the sourcemaps to Sentry, then create a Sentry release.
 
-**Ensure your build task (`yarn build`) is configured to output sourcemaps.**
+### Pre-requisites
 
+- Your build task is ran with `yarn build`
+- Your build task (`yarn build`) is configured to output sourcemaps
 
-Install it in your project by creating the file `.github/workflows/lint.yml`, with the following content 
+Your tsconfig should contains the following properties:
+
+```json
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "inlineSources": true,
+
+    // Set `sourceRoot` to  "/" to strip the build path prefix from
+    // generated source code references. This will improve issue grouping in Sentry.
+    "sourceRoot": "/"
+  }
+}
+```
+
+See more on Sentry documentation: https://docs.sentry.io/platforms/node/sourcemaps/uploading/typescript/
+
+#### Usage
+
+Install it in your project by creating the file `.github/workflows/create-sentry-release.yml`, with the following content 
 
 ```yaml
 name: Create a Sentry release
@@ -96,6 +114,24 @@ jobs:
 - [Github docs about reused worflows](https://docs.github.com/en/actions/using-workflows/reusing-workflows)
 - Environement variables can not be passed to the called workflow
 - All workflows have a lower `timeout-minutes` than the default one (`360` minutes)
+
+All worflows can be run with a matrix, e.g.
+
+```yaml 
+name: Lint
+
+on: [push]
+
+jobs:
+  lint:
+    strategy:
+      matrix:
+        target: ['16', '18', '20'] # Set your desired node versions (Default is 16)
+
+    uses: snapshot-labs/actions/.github/workflows/lint.yml@main
+    with:
+      target: ${{ matrix.target }}
+```
 
 ## Convention
 
