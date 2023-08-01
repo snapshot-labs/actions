@@ -25,6 +25,7 @@ on: [push]
 jobs:
   lint:
     uses: snapshot-labs/actions/.github/workflows/lint.yml@main
+    secrets: inherit
 ```
 
 ### Test
@@ -48,6 +49,7 @@ on: [push]
 jobs:
   test:
     uses: snapshot-labs/actions/.github/workflows/test.yml@main
+    secrets: inherit
 ```
 
 You can optionally setup a storage
@@ -58,6 +60,7 @@ on: [push]
 jobs:
   test:
     uses: snapshot-labs/actions/.github/workflows/test.yml@main
+    secrets: inherit
     with:
       # Setup MySQL database
       mysql_database_name: mydb_test
@@ -103,6 +106,7 @@ on:
 jobs:
   create-sentry-release:
     uses: snapshot-labs/actions/.github/workflows/create-sentry-release.yml@main
+    secrets: inherit
     with:
       project: YOUR-SENTRY-PROJECT-NAME
       # You can optionally add the following line to set the node version (Default is 16)
@@ -129,6 +133,7 @@ jobs:
         target: ['16', '18', '20'] # Set your desired node versions (Default is 16)
 
     uses: snapshot-labs/actions/.github/workflows/lint.yml@main
+    secrets: inherit
     with:
       target: ${{ matrix.target }}
 ```
