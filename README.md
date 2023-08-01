@@ -95,10 +95,13 @@ jobs:
 
 This workflow trigger a task to publish a package to NPM.
 
-**Require that the `NODE_AUTH_TOKEN` be set in the Github secrets as `NPM_TOKEN`.**
+#### Pre-requisites
+
+- The publish task requires the `NODE_AUTH_TOKEN` env variable. It should be set in the Github secrets as `NPM_TOKEN`.
+
+#### Usage
 
 Install it in your project by creating the file `.github/workflows/publish-npm.yml`, with the following content 
-
 
 ```yaml 
 name: Publish NPM package
