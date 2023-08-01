@@ -1,4 +1,5 @@
 name: Lint
+
 on:
   workflow_call:
     inputs:
@@ -6,15 +7,24 @@ on:
         required: false
         default: '16'
         type: string
+
 jobs:
   lint:
+    name: Lint
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ inputs.target }}
           cache: 'yarn'
-      - run: yarn install --frozen-lockfile
-      - run: yarn lint
-      - run: yarn typecheck
+
+      - name: Yarn install
+        run: yarn install --frozen-lockfile
+
+      - name: Lint
+        run: yarn lint
+
+      - name: Typecheck
+        run: yarn typecheck
