@@ -1,0 +1,29 @@
+name: Publish NPM package
+
+on:
+  workflow_call:
+    inputs:
+      target:
+        required: false
+        default: '16'
+        type: string
+
+jobs:
+  publish-npm:
+    name: Publish NPM package
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ inputs.target }}
+          registry-url: https://registry.npmjs.org/
+
+      - name: Yarn install
+        run: yarn install --frozen-lockfile
+
+      - name: Publish to NPM
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}

@@ -91,4 +91,23 @@ jobs:
       # target: '16'
 ```
 
+### Publish a NPM package
 
+This workflow trigger a task to publish a package to NPM.
+
+**Require that the `NODE_AUTH_TOKEN` be set in the Github secrets as `NPM_TOKEN`.**
+
+Install it in your project by creating the file `.github/workflows/publish-npm.yml`, with the following content 
+
+
+```yaml 
+name: Publish NPM package
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  publish-npm:
+    uses: snapshot-labs/actions/.github/workflows/publish-npm.yml@main
+```
