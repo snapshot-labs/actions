@@ -95,3 +95,8 @@ jobs:
 
 - [Github docs about reused worflows](https://docs.github.com/en/actions/using-workflows/reusing-workflows)
 - Environement variables can not be passed to the called workflow
+- All workflows have a lower `timeout-minutes` than the default one (`360` minutes)
+
+## Convention
+
+- Workflows are following the `VERB-DESCRIPTION` convention (e.g. `lint`, `build`, `publish-npm`) 
