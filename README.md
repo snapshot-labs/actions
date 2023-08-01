@@ -91,4 +91,7 @@ jobs:
       # target: '16'
 ```
 
+## Notes
 
+- [Github docs about reused worflows](https://docs.github.com/en/actions/using-workflows/reusing-workflows)
+- Environement variables can not be passed to the called workflow
