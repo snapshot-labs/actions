@@ -5,8 +5,8 @@ on:
     inputs:
       target:
         required: false
-        default: '16'
         type: string
+        default: '16'
       mysql_database_name:
         required: false
         type: string
@@ -14,12 +14,25 @@ on:
         required: false
         type: string
         default: 'src/helpers/schema.sql'
+      redis:
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
     timeout-minutes: 10
+
+    services:
+      redis:
+        image: ${{ inputs.redis && 'redis' || '' }}
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - uses: actions/checkout@v3

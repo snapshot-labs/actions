@@ -65,6 +65,8 @@ jobs:
       # Setup MySQL database
       mysql_database_name: mydb_test
       mysql_schema_path: ./schema.sql # Default to 'src/helpers/schema.sql'
+      # Setup redis
+      redis: true
 ```
 
 ### Create a sentry release
