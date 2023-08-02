@@ -21,7 +21,9 @@ on:
 
 jobs:
   test:
+    name: Test
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     services:
       redis:
@@ -38,6 +40,7 @@ jobs:
         with:
           node-version: ${{ inputs.target }}
           cache: 'yarn'
+
       - name: Set up MySQL
         if: ${{ inputs.mysql_database_name }}
         run: |
@@ -46,8 +49,13 @@ jobs:
           mysql -uroot -proot ${{ inputs.mysql_database_name }} < ${{ inputs.mysql_schema_path }}
           mysql -uroot -proot -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';"
           mysql -uroot -proot -e "FLUSH PRIVILEGES;"
-      - run: yarn
-      - run: yarn test
+
+      - name: Yarn install
+        run: yarn install --frozen-lockfile
+
+      - name: Test
+        run: yarn test
+
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
         with:
