@@ -1,11 +1,12 @@
 name: Test
+
 on:
   workflow_call:
     inputs:
       target:
         required: false
-        default: '16'
         type: string
+        default: '16'
       mysql_database_name:
         required: false
         type: string
@@ -13,15 +14,33 @@ on:
         required: false
         type: string
         default: 'src/helpers/schema.sql'
+      redis:
+        required: false
+        type: boolean
+        default: false
+
 jobs:
   test:
+    name: Test
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    services:
+      redis:
+        image: ${{ inputs.redis && 'redis' || '' }}
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ inputs.target }}
           cache: 'yarn'
+
       - name: Set up MySQL
         if: ${{ inputs.mysql_database_name }}
         run: |
@@ -30,8 +49,13 @@ jobs:
           mysql -uroot -proot ${{ inputs.mysql_database_name }} < ${{ inputs.mysql_schema_path }}
           mysql -uroot -proot -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';"
           mysql -uroot -proot -e "FLUSH PRIVILEGES;"
-      - run: yarn
-      - run: yarn test
+
+      - name: Yarn install
+        run: yarn install --frozen-lockfile
+
+      - name: Test
+        run: yarn test
+
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
         with:
