@@ -73,7 +73,7 @@ jobs:
 
 This workflow trigger a task to upload the sourcemaps to Sentry, then create a Sentry release.
 
-### Pre-requisites
+#### Pre-requisites
 
 - Your build task is ran with `yarn build`
 - Your build task (`yarn build`) is configured to output sourcemaps
@@ -115,6 +115,31 @@ jobs:
       # target: '16'
 ```
 
+### Publish a NPM package
+
+This workflow trigger a task to publish a package to NPM.
+
+#### Pre-requisites
+
+- The publish task requires the `NODE_AUTH_TOKEN` env variable. It should be set in the Github secrets as `NPM_TOKEN`.
+
+#### Usage
+
+Install it in your project by creating the file `.github/workflows/publish-npm.yml`, with the following content 
+
+```yaml 
+name: Publish NPM package
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  publish-npm:
+    uses: snapshot-labs/actions/.github/workflows/publish-npm.yml@main
+    secrets: inherit
+```
+
 ## Notes
 
 - [Github docs about reused worflows](https://docs.github.com/en/actions/using-workflows/reusing-workflows)
@@ -143,3 +168,4 @@ jobs:
 ## Convention
 
 - Workflows are following the `VERB-DESCRIPTION` convention (e.g. `lint`, `build`, `publish-npm`) 
+
