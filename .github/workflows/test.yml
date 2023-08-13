@@ -18,6 +18,9 @@ on:
         required: false
         type: boolean
         default: false
+      dotenv_vars:
+        required: false
+        type: string
 
 jobs:
   test:
@@ -52,6 +55,10 @@ jobs:
 
       - name: Yarn install
         run: yarn install --frozen-lockfile
+
+      - name: Setup test environment variables
+        if: ${{ inputs.dotenv_vars }}
+        run: echo -e "\n${{ inputs.dotenv_vars }}" >> test/.env.test
 
       - name: Test
         run: yarn test
