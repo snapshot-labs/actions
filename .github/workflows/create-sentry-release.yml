@@ -10,6 +10,10 @@ on:
       project:
         required: true
         type: string
+      sourcemaps:
+        required: false
+        default: './dist'
+        type: string
 
 jobs:
   create-sentry-release:
@@ -32,6 +36,8 @@ jobs:
 
       - name: Create a Sentry release
         uses: getsentry/action-release@v1.4.1
+        with:
+          sourcemaps: ${{ inputs.sourcemaps }}
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
