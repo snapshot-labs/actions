@@ -140,6 +140,29 @@ jobs:
     secrets: inherit
 ```
 
+### Bump the package.json version and create a tag
+
+This workflow trigger a task to bump the package.json version, and creates a tag with the newly created version.
+Commits message will be read to determine the version bump type.
+
+#### Usage
+
+Install it in your project by creating the file `.github/workflows/bump-version.yml`, with the following content 
+
+```yaml 
+name: Bump version
+
+on:
+  push:
+    branches:
+      - 'main' # or master, depending on your repo
+
+jobs:
+  bump-version:
+    uses: snapshot-labs/actions/.github/workflows/bump-version.yml@main
+    secrets: inherit
+```
+
 ## Notes
 
 - [Github docs about reused worflows](https://docs.github.com/en/actions/using-workflows/reusing-workflows)

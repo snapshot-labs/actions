@@ -1,0 +1,40 @@
+name: Bump version
+
+on:
+  workflow_call:
+    inputs:
+      tag-prefix:
+        required: false
+        default: 'v'
+        type: string
+
+jobs:
+  bump-version:
+    name: Bump Version on master
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+
+      - name: cat package.json
+        run: cat ./package.json
+
+      - name: Automated Version Bump
+        id: version-bump
+        uses: phips28/gh-action-bump-version@master
+        with:
+          tag-prefix: ${{ inputs.tag-prefix }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: cat package.json
+        run: cat ./package.json
+
+      - name: Output Step
+        env:
+          NEW_TAG: ${{ steps.version-bump.outputs.newTag }}
+        run: echo "new tag $NEW_TAG"
