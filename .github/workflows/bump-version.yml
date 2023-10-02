@@ -13,6 +13,8 @@ jobs:
     name: Bump Version on master
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    outputs:
+      tag: ${{ steps.save-tag.outputs.tag }}
 
     steps:
       - name: Checkout source code
@@ -38,3 +40,7 @@ jobs:
         env:
           NEW_TAG: ${{ steps.version-bump.outputs.newTag }}
         run: echo "new tag $NEW_TAG"
+
+      - name: Save tag to output
+        id: save-tag
+        run: echo "tag=$NEW_TAG" >> "$GITHUB_OUTPUT"
