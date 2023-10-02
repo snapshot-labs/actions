@@ -8,13 +8,17 @@ on:
         default: 'v'
         type: string
     outputs:
-      tag: ${{ steps.save-tag.outputs.tag }}
+      tag:
+        description: Newly created tag
+        value: ${{ jobs.bump-version.outputs.tag }}
 
 jobs:
   bump-version:
     name: Bump Version on master
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    outputs:
+      tag: ${{ steps.save-tag.outputs.tag }}
 
     steps:
       - name: Checkout source code
