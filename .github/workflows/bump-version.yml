@@ -42,5 +42,7 @@ jobs:
         run: echo "new tag $NEW_TAG"
 
       - name: Save tag to output
+        env:
+          NEW_TAG: ${{ steps.version-bump.outputs.newTag }}
         id: save-tag
         run: echo "tag=$NEW_TAG" >> "$GITHUB_OUTPUT"
