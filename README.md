@@ -140,6 +140,29 @@ jobs:
     secrets: inherit
 ```
 
+
+### Create a Github release
+
+This workflow trigger a task to create a github release
+
+#### Usage
+
+Install it in your project by creating the file `.github/workflows/create-github-release.yml`, with the following content 
+
+```yaml 
+name: Create Github release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  create-github-release:
+    uses: snapshot-labs/actions/.github/workflows/create-github-release.yml@main
+    secrets: inherit
+```
+
 ## Notes
 
 - [Github docs about reused worflows](https://docs.github.com/en/actions/using-workflows/reusing-workflows)
