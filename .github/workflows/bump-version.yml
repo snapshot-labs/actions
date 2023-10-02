@@ -7,14 +7,14 @@ on:
         required: false
         default: 'v'
         type: string
+    outputs:
+      tag: ${{ steps.save-tag.outputs.tag }}
 
 jobs:
   bump-version:
     name: Bump Version on master
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    outputs:
-      tag: ${{ steps.save-tag.outputs.tag }}
 
     steps:
       - name: Checkout source code
@@ -41,7 +41,7 @@ jobs:
           NEW_TAG: ${{ steps.version-bump.outputs.newTag }}
         run: echo "new tag $NEW_TAG"
 
-      - name: Save tag to output
+      - name: Save tag to workflow output
         env:
           NEW_TAG: ${{ steps.version-bump.outputs.newTag }}
         id: save-tag
