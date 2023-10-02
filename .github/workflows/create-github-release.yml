@@ -4,7 +4,7 @@ on:
   workflow_call:
 
 jobs:
-  create-release:
+  create-github-release:
     name: Create a Github release
     runs-on: ubuntu-latest
 
