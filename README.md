@@ -115,6 +115,52 @@ jobs:
       # target: '16'
 ```
 
+### Bump the package.json version and create a tag
+
+This workflow trigger a task to bump the package.json version, and creates a tag with the newly created version.
+Commits message will be read to determine the version bump type.
+
+#### Usage
+
+Install it in your project by creating the file `.github/workflows/bump-version.yml`, with the following content 
+
+```yaml 
+name: Bump version
+
+on:
+  push:
+    branches:
+      - 'main' # or master, depending on your repo
+
+jobs:
+  bump-version:
+    uses: snapshot-labs/actions/.github/workflows/bump-version.yml@main
+    secrets: inherit
+```
+
+### Create a Github release
+
+This workflow trigger a task to create a github release
+
+#### Usage
+
+Install it in your project by creating the file `.github/workflows/create-github-release.yml`, with the following content 
+
+```yaml 
+name: Create Github release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  create-github-release:
+    uses: snapshot-labs/actions/.github/workflows/create-github-release.yml@main
+    secrets: inherit
+```
+
+
 ### Publish a NPM package
 
 This workflow trigger a task to publish a package to NPM.
@@ -137,6 +183,38 @@ on:
 jobs:
   publish-npm:
     uses: snapshot-labs/actions/.github/workflows/publish-npm.yml@main
+    secrets: inherit
+```
+
+### Release
+
+This workflow triggers an aggregation of jobs/workflows, to publish a pull request to NPM. 
+
+This task will trigger the following jobs in order:
+
+- bump-version: to bump the version in package.json, and create a new tag
+- create-github-release: create a new github release associated to the new tag
+- publish-npm: publish the new github release to NPM
+
+#### Pre-requisites
+
+- View requirements for each workflow
+
+#### Usage
+
+Install it in your project by creating the file `.github/workflows/release.yml`, with the following content 
+
+```yaml 
+name: Release
+
+on:
+  push:
+    branches:
+      - 'master'
+
+jobs:
+  release:
+    uses: snapshot-labs/actions/.github/workflows/release.yml@main
     secrets: inherit
 ```
 
@@ -168,4 +246,3 @@ jobs:
 ## Convention
 
 - Workflows are following the `VERB-DESCRIPTION` convention (e.g. `lint`, `build`, `publish-npm`) 
-
