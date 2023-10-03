@@ -1,9 +1,6 @@
 name: Bump, tag, release and publish to npm
 
-on:
-  push:
-    branches:
-      - 'master'
+on: [workflow_call]
 
 jobs:
   bump-version:
