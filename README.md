@@ -140,6 +140,39 @@ jobs:
     secrets: inherit
 ```
 
+### Release
+
+This workflow triggers an aggregation of jobs/workflows, to publish a pull request to NPM. 
+
+This task will trigger the following jobs in order:
+
+- bump-version: to bump the version in package.json, and create a new tag
+- create-github-release: create a new github release associated to the new tag
+- publish-npm: publish the new github release to NPM
+
+#### Pre-requisites
+
+- View requirements for each workflow
+
+#### Usage
+
+Install it in your project by creating the file `.github/workflows/release.yml`, with the following content 
+
+```yaml 
+name: Bump, tag, release and publish to npm
+
+on:
+  push:
+    branches:
+      - 'master'
+
+jobs:
+  release:
+    uses: snapshot-labs/actions/.github/workflows/release.yml@main
+    secrets: inherit
+```
+
+
 ## Notes
 
 - [Github docs about reused worflows](https://docs.github.com/en/actions/using-workflows/reusing-workflows)
