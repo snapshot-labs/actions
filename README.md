@@ -115,28 +115,26 @@ jobs:
       # target: '16'
 ```
 
-### Publish a NPM package
+### Bump the package.json version and create a tag
 
-This workflow trigger a task to publish a package to NPM.
-
-#### Pre-requisites
-
-- The publish task requires the `NODE_AUTH_TOKEN` env variable. It should be set in the Github secrets as `NPM_TOKEN`.
+This workflow trigger a task to bump the package.json version, and creates a tag with the newly created version.
+Commits message will be read to determine the version bump type.
 
 #### Usage
 
-Install it in your project by creating the file `.github/workflows/publish-npm.yml`, with the following content 
+Install it in your project by creating the file `.github/workflows/bump-version.yml`, with the following content 
 
 ```yaml 
-name: Publish NPM package
+name: Bump version
 
 on:
-  release:
-    types: [created]
+  push:
+    branches:
+      - 'main' # or master, depending on your repo
 
 jobs:
-  publish-npm:
-    uses: snapshot-labs/actions/.github/workflows/publish-npm.yml@main
+  bump-version:
+    uses: snapshot-labs/actions/.github/workflows/bump-version.yml@main
     secrets: inherit
 ```
 
@@ -162,6 +160,32 @@ jobs:
     secrets: inherit
 ```
 
+
+### Publish a NPM package
+
+This workflow trigger a task to publish a package to NPM.
+
+#### Pre-requisites
+
+- The publish task requires the `NODE_AUTH_TOKEN` env variable. It should be set in the Github secrets as `NPM_TOKEN`.
+
+#### Usage
+
+Install it in your project by creating the file `.github/workflows/publish-npm.yml`, with the following content 
+
+```yaml 
+name: Publish NPM package
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  publish-npm:
+    uses: snapshot-labs/actions/.github/workflows/publish-npm.yml@main
+    secrets: inherit
+```
+
 ### Release
 
 This workflow triggers an aggregation of jobs/workflows, to publish a pull request to NPM. 
@@ -181,7 +205,7 @@ This task will trigger the following jobs in order:
 Install it in your project by creating the file `.github/workflows/release.yml`, with the following content 
 
 ```yaml 
-name: Bump, tag, release and publish to npm
+name: Release
 
 on:
   push:
@@ -193,8 +217,6 @@ jobs:
     uses: snapshot-labs/actions/.github/workflows/release.yml@main
     secrets: inherit
 ```
-
-
 
 ## Notes
 
@@ -224,4 +246,3 @@ jobs:
 ## Convention
 
 - Workflows are following the `VERB-DESCRIPTION` convention (e.g. `lint`, `build`, `publish-npm`) 
-
