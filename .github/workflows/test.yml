@@ -14,9 +14,14 @@ on:
         required: false
         type: string
         default: 'src/helpers/schema.sql'
-      redis-version:
+      redis:
+        required: false
+        type: boolean
+        default: false
+      redis_version:
         required: false
         type: string
+        default: '7'
       dotenv_vars:
         required: false
         type: string
@@ -44,10 +49,10 @@ jobs:
           mysql -uroot -proot -e "FLUSH PRIVILEGES;"
 
       - name: Setup Redis
-        if: ${{ inputs.redis-version }}
+        if: ${{ inputs.redis }}
         uses: supercharge/redis-github-action@1.7.0
         with:
-          redis-version: ${{ inputs.redis-version }}
+          redis-version: ${{ inputs.redis_version }}
 
       - name: Yarn install
         run: yarn install --frozen-lockfile
