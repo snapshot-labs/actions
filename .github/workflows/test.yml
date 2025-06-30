@@ -14,6 +14,13 @@ on:
         required: false
         type: string
         default: 'src/helpers/schema.sql'
+      postgres_database_name:
+        required: false
+        type: string
+      postgres_schema_path:
+        required: false
+        type: string
+        default: 'src/helpers/schema.sql'
       redis:
         required: false
         type: boolean
@@ -47,6 +54,16 @@ jobs:
           mysql -uroot -proot ${{ inputs.mysql_database_name }} < ${{ inputs.mysql_schema_path }}
           mysql -uroot -proot -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';"
           mysql -uroot -proot -e "FLUSH PRIVILEGES;"
+
+      - name: Set up PostgreSQL
+        if: ${{ inputs.postgres_database_name }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql postgresql-contrib
+          sudo systemctl start postgresql.service
+          sudo -u postgres psql -c "ALTER USER postgres PASSWORD 'postgres';"
+          sudo -u postgres createdb ${{ inputs.postgres_database_name }}
+          sudo -u postgres psql -d ${{ inputs.postgres_database_name }} -f ${{ inputs.postgres_schema_path }}
 
       - name: Setup Redis
         if: ${{ inputs.redis }}
