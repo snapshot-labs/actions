@@ -32,6 +32,10 @@ on:
       dotenv_vars:
         required: false
         type: string
+      env_vars:
+        required: false
+        type: string
+        default: '{}'
 
 jobs:
   test:
@@ -77,6 +81,11 @@ jobs:
       - name: Setup test environment variables
         if: ${{ inputs.dotenv_vars }}
         run: echo -e "\n${{ inputs.dotenv_vars }}" >> test/.env.test
+
+      - name: Setup custom environment variables
+        if: ${{ inputs.env_vars != '{}' }}
+        run: |
+          echo '${{ inputs.env_vars }}' | jq -r 'to_entries[] | "\(.key)=\(.value)"' >> $GITHUB_ENV
 
       - name: Test
         run: yarn test
