@@ -67,9 +67,7 @@ jobs:
 
       - name: Setup Redis
         if: ${{ inputs.redis }}
-        uses: supercharge/redis-github-action@1.7.0
-        with:
-          redis-version: ${{ inputs.redis_version }}
+        run: docker run -d --name redis -p 6379:6379 redis:${{ inputs.redis_version }}
 
       - name: Yarn install
         run: yarn install --frozen-lockfile
