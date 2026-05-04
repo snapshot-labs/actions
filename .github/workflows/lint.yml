@@ -34,7 +34,7 @@ jobs:
         run: ${{ inputs.package_manager }} install --frozen-lockfile
 
       - name: Lint
-        run: ${{ inputs.package_manager }} lint
+        run: ${{ inputs.package_manager }} run lint
 
       - name: Typecheck
-        run: ${{ inputs.package_manager }} typecheck
+        run: ${{ inputs.package_manager }} run typecheck

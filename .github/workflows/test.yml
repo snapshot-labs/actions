@@ -86,7 +86,7 @@ jobs:
         run: echo -e "\n${{ inputs.dotenv_vars }}" >> test/.env.test
 
       - name: Test
-        run: ${{ inputs.package_manager }} test
+        run: ${{ inputs.package_manager }} run test
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3

@@ -41,7 +41,7 @@ jobs:
         run: ${{ inputs.package_manager }} install --frozen-lockfile
 
       - name: Build
-        run: ${{ inputs.package_manager }} build
+        run: ${{ inputs.package_manager }} run build
 
       - name: Create a Sentry release
         uses: getsentry/action-release@v1.4.1
