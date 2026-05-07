@@ -7,6 +7,10 @@ on:
         required: false
         default: '18'
         type: string
+      package_manager:
+        required: false
+        default: 'yarn'
+        type: string
 
 jobs:
   lint:
@@ -16,16 +20,21 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+
+      - name: Setup Bun
+        if: inputs.package_manager == 'bun'
+        uses: oven-sh/setup-bun@v2
+
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ inputs.target }}
-          cache: 'yarn'
+          cache: ${{ inputs.package_manager == 'yarn' && 'yarn' || '' }}
 
-      - name: Yarn install
-        run: yarn install --frozen-lockfile
+      - name: Install dependencies
+        run: ${{ inputs.package_manager }} install --frozen-lockfile
 
       - name: Lint
-        run: yarn lint
+        run: ${{ inputs.package_manager }} run lint
 
       - name: Typecheck
-        run: yarn typecheck
+        run: ${{ inputs.package_manager }} run typecheck

@@ -7,6 +7,10 @@ on:
         required: false
         default: '16'
         type: string
+      package_manager:
+        required: false
+        default: 'yarn'
+        type: string
       project:
         required: true
         type: string
@@ -23,16 +27,21 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+
+      - name: Setup Bun
+        if: inputs.package_manager == 'bun'
+        uses: oven-sh/setup-bun@v2
+
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ inputs.target }}
-          cache: 'yarn'
+          cache: ${{ inputs.package_manager == 'yarn' && 'yarn' || '' }}
 
-      - name: Yarn install
-        run: yarn install --frozen-lockfile
+      - name: Install dependencies
+        run: ${{ inputs.package_manager }} install --frozen-lockfile
 
-      - name: Yarn build
-        run: yarn build
+      - name: Build
+        run: ${{ inputs.package_manager }} run build
 
       - name: Create a Sentry release
         uses: getsentry/action-release@v1.4.1

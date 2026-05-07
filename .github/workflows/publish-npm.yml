@@ -7,6 +7,10 @@ on:
         required: false
         default: '16'
         type: string
+      package_manager:
+        required: false
+        default: 'yarn'
+        type: string
 
 jobs:
   publish-npm:
@@ -15,15 +19,20 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+
+      - name: Setup Bun
+        if: inputs.package_manager == 'bun'
+        uses: oven-sh/setup-bun@v2
+
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ inputs.target }}
           registry-url: https://registry.npmjs.org/
 
-      - name: Yarn install
-        run: yarn install --frozen-lockfile
+      - name: Install dependencies
+        run: ${{ inputs.package_manager }} install --frozen-lockfile
 
       - name: Publish to NPM
-        run: yarn publish
+        run: ${{ inputs.package_manager }} publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}

@@ -7,6 +7,10 @@ on:
         required: false
         type: string
         default: '16'
+      package_manager:
+        required: false
+        type: string
+        default: 'yarn'
       mysql_database_name:
         required: false
         type: string
@@ -41,10 +45,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+
+      - name: Setup Bun
+        if: inputs.package_manager == 'bun'
+        uses: oven-sh/setup-bun@v2
+
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ inputs.target }}
-          cache: 'yarn'
+          cache: ${{ inputs.package_manager == 'yarn' && 'yarn' || '' }}
 
       - name: Set up MySQL
         if: ${{ inputs.mysql_database_name }}
@@ -69,15 +78,15 @@ jobs:
         if: ${{ inputs.redis }}
         run: docker run -d --name redis -p 6379:6379 redis:${{ inputs.redis_version }}
 
-      - name: Yarn install
-        run: yarn install --frozen-lockfile
+      - name: Install dependencies
+        run: ${{ inputs.package_manager }} install --frozen-lockfile
 
       - name: Setup test environment variables
         if: ${{ inputs.dotenv_vars }}
         run: echo -e "\n${{ inputs.dotenv_vars }}" >> test/.env.test
 
       - name: Test
-        run: yarn test
+        run: ${{ inputs.package_manager }} run test
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3

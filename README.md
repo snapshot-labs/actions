@@ -188,6 +188,19 @@ jobs:
       target: ${{ matrix.target }}
 ```
 
+## Using Bun instead of Yarn
+
+The `lint`, `test`, `create-sentry-release` and `publish-npm` workflows accept a `package_manager` input that can be set to `bun` (default is `yarn`). When set to `bun`, the workflow installs Bun, runs `bun install --frozen-lockfile`, and invokes the project's scripts via `bun` instead of `yarn`. A `bun.lock` must be committed to the repo.
+
+```yaml
+jobs:
+  lint:
+    uses: snapshot-labs/actions/.github/workflows/lint.yml@main
+    secrets: inherit
+    with:
+      package_manager: bun
+```
+
 ## Convention
 
 - Workflows are following the `VERB-DESCRIPTION` convention (e.g. `lint`, `build`, `publish-npm`) 
