@@ -36,6 +36,10 @@ on:
       dotenv_vars:
         required: false
         type: string
+      working_directory:
+        required: false
+        type: string
+        default: '.'
 
 jobs:
   test:
@@ -57,6 +61,7 @@ jobs:
 
       - name: Set up MySQL
         if: ${{ inputs.mysql_database_name }}
+        working-directory: ${{ inputs.working_directory }}
         run: |
           sudo /etc/init.d/mysql start
           mysql -e 'CREATE DATABASE ${{ inputs.mysql_database_name }};' -uroot -proot
@@ -66,6 +71,7 @@ jobs:
 
       - name: Set up PostgreSQL
         if: ${{ inputs.postgres_database_name }}
+        working-directory: ${{ inputs.working_directory }}
         run: |
           sudo apt-get update
           sudo apt-get install -y postgresql postgresql-contrib
@@ -79,13 +85,16 @@ jobs:
         run: docker run -d --name redis -p 6379:6379 redis:${{ inputs.redis_version }}
 
       - name: Install dependencies
+        working-directory: ${{ inputs.working_directory }}
         run: ${{ inputs.package_manager }} install --frozen-lockfile
 
       - name: Setup test environment variables
         if: ${{ inputs.dotenv_vars }}
+        working-directory: ${{ inputs.working_directory }}
         run: echo -e "\n${{ inputs.dotenv_vars }}" >> test/.env.test
 
       - name: Test
+        working-directory: ${{ inputs.working_directory }}
         run: ${{ inputs.package_manager }} run test
 
       - name: Upload coverage reports to Codecov
