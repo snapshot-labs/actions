@@ -48,13 +48,13 @@ jobs:
     timeout-minutes: 2
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
 
       - name: Setup Bun
         if: inputs.package_manager == 'bun'
         uses: oven-sh/setup-bun@v2
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v6
         with:
           node-version: ${{ inputs.target }}
           cache: ${{ inputs.package_manager == 'yarn' && 'yarn' || '' }}
@@ -98,6 +98,6 @@ jobs:
         run: ${{ inputs.package_manager }} run test
 
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}

@@ -18,13 +18,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
 
       - name: Setup Bun
         if: inputs.package_manager == 'bun'
         uses: oven-sh/setup-bun@v2
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v6
         with:
           node-version: ${{ inputs.target }}
           registry-url: https://registry.npmjs.org/
