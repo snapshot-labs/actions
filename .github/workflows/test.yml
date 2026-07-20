@@ -78,9 +78,9 @@ jobs:
           sudo systemctl start postgresql.service
           sudo -u postgres psql -c "ALTER USER postgres PASSWORD 'postgres';"
           sudo -u postgres createdb ${{ inputs.postgres_database_name }}
-          if [ -n "${{ inputs.postgres_schema_path }}" ]; then
-            sudo -u postgres psql -d ${{ inputs.postgres_database_name }} -f ${{ inputs.postgres_schema_path }}
-          fi
+if [[ -n "${{ inputs.postgres_schema_path }}" ]]; then
+  sudo -u postgres psql -d "${{ inputs.postgres_database_name }}" -f "${{ inputs.postgres_schema_path }}"
+fi
 
       - name: Setup Redis
         if: ${{ inputs.redis }}
